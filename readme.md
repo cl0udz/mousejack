@@ -27,13 +27,6 @@ The following hardware has been tested and is known to work.
 - SparkFun nRF24LU1+ breakout board
 - Logitech Unifying dongle (model C-U0007, Nordic Semiconductor based)
 
-## Initialize the submodule
-
-```
-git submodule init
-git submodule update
-```
-
 ## Build the firmware
 
 ```
