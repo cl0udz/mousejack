@@ -23,6 +23,7 @@ from lib import common
 # Parse command line arguments and initialize the radio
 common.init_args('./nrf24-sniffer.py')
 common.parser.add_argument('-a', '--address', type=str, help='Address to sniff, following as it changes channels', required=True)
+common.parser.add_argument('-o', '--output', type=str, help='Log file to save captures', required=False)
 common.parser.add_argument('-t', '--timeout', type=float, help='Channel timeout, in milliseconds', default=100)
 common.parser.add_argument('-k', '--ack_timeout', type=int, help='ACK timeout in microseconds, accepts [250,4000], step 250', default=250)
 common.parser.add_argument('-r', '--retries', type=int, help='Auto retry limit, accepts [0,15]', default=1, choices=xrange(0, 16), metavar='RETRIES')
@@ -43,6 +44,9 @@ common.radio.enter_sniffer_mode(address)
 
 # Convert channel timeout from milliseconds to seconds
 timeout = float(common.args.timeout) / float(1000)
+
+#Output file to save the capture
+output = common.args.output
 
 # Parse the ping payload
 ping_payload = common.args.ping_payload.replace(':', '').decode('hex')
@@ -99,4 +103,9 @@ while True:
               len(payload),
               address_string,
               ':'.join('{:02X}'.format(b) for b in payload)))
-
+    
+    # Save packets to the file
+    packge = ':'.join('{:02X}'.format(b) for b in payload)
+    packet_log = open(output, 'a')
+    packet_log.write(packge+'\n')
+    packet_log.close()
